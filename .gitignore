@@ -1,4 +1,8 @@
 target/
+.log
+felix-cache/
+.idea/
+.iml
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup

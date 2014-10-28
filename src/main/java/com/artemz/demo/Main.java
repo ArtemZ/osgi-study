@@ -68,17 +68,37 @@ public class Main {
 
 
         }*/
+        /*
+            Printing all installed bundles from main context
+         */
+        Bundle[] bundles = context.getBundles();
+        for (int i = 0; i < bundles.length; i++){
+            System.out.println("Installed bundle: " + bundles[i].getSymbolicName());
+            ServiceReference<?>[] services = bundles[i].getRegisteredServices();
+            /*
+                Printing out all available services in this bundle
+             */
+            for (int o = 0; o < services.length; o++){
+                System.out.println(services[o].getProperty("objectClass"));
+            }
 
-        ServiceReference ref =
-                admin.getBundleContext().getServiceReference(RepositoryAdmin.class.getName());
+        }
 
         RepositoryAdmin repositoryAdmin = null;
+
+        BundleManager bundleManager = new BundleManager(admin);
+        repositoryAdmin = (RepositoryAdmin)bundleManager.getService(RepositoryAdmin.class.getName());
+
+        /*ServiceReference ref =
+                admin.getBundleContext().getServiceReference(RepositoryAdmin.class.getName());
+
+
         if (ref != null) {
             repositoryAdmin = (RepositoryAdmin)admin.getBundleContext().getService(ref);
         } else {
             System.out.println("ref is null");
             System.exit(1);
-        }
+        }*/
         Repository[] repositories = repositoryAdmin.listRepositories();
 
         System.out.println("Repo count: " + repositories.length);

@@ -13,9 +13,18 @@ import org.osgi.framework.ServiceReference;
  */
 public class ObrManager {
     private RepositoryAdmin repositoryAdmin;
+    /*
+        BundleContext is the main bundle context of the framework
+     */
     public ObrManager(BundleContext context){
         repositoryAdmin = getRepositoryAdmin(context);
     }
+    /*
+        BundleContext is the main bundle context of the framework
+
+        This method looks up for felix bundlerepository bundle and if it's installed and started
+        then it tries to retrieve RepositoryAdmin service
+     */
     public static RepositoryAdmin getRepositoryAdmin(BundleContext ctx){
         ServiceReference reference = ctx.getServiceReference(RepositoryAdmin.class.getName());
         if (reference != null){

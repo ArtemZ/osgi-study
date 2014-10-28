@@ -36,7 +36,7 @@ public class Launcher {
 
         config.put(FelixConstants.SYSTEMBUNDLE_ACTIVATORS_PROP, activators);
 
-        config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, "org.apache.felix.bundlerepository; version=2.0.2");
+        config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, "org.apache.felix.bundlerepository; version=2.1");
 
         // automated bundles deployment
         config.put("felix.fileinstall.dir", "./base-bundles");

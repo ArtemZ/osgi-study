@@ -87,6 +87,7 @@ public class Main {
         RepositoryAdmin repositoryAdmin = null;
 
         BundleManager bundleManager = new BundleManager(admin);
+        bundleManager.listAvailableServices();
         repositoryAdmin = (RepositoryAdmin)bundleManager.getService(RepositoryAdmin.class.getName());
 
         /*ServiceReference ref =

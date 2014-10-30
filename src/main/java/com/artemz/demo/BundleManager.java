@@ -5,7 +5,9 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,9 +52,16 @@ public class BundleManager {
                 Printing out all available services in this bundle
              */
         for (int o = 0; o < services.length; o++){
+            listServiceProperties(services[o].getPropertyKeys());
 
-            System.out.println(services[o].getProperty("objectClass"));
         }
         return betterServiceCollection;
+    }
+    private List<String> listServiceProperties(String[] keys){
+        List<String> props = new ArrayList<String>();
+        for (int i = 0; i < keys.length; i++){
+            System.out.println("propertie " + keys[i]);
+        }
+        return props;
     }
 }

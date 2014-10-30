@@ -73,7 +73,7 @@ public class Main {
          */
         Bundle[] bundles = context.getBundles();
         for (int i = 0; i < bundles.length; i++){
-            System.out.println("Installed bundle: " + bundles[i].getSymbolicName());
+            System.out.println("Installed bundle: " + bundles[i].getLocation());
             ServiceReference<?>[] services = bundles[i].getRegisteredServices();
             /*
                 Printing out all available services in this bundle
@@ -88,7 +88,7 @@ public class Main {
 
         BundleManager bundleManager = new BundleManager(admin);
         bundleManager.listAvailableServices();
-        repositoryAdmin = (RepositoryAdmin)bundleManager.getService(RepositoryAdmin.class.getName());
+        repositoryAdmin = (RepositoryAdmin)bundleManager.getService(RepositoryAdmin.class);
 
         /*ServiceReference ref =
                 admin.getBundleContext().getServiceReference(RepositoryAdmin.class.getName());

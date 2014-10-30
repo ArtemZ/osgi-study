@@ -45,6 +45,16 @@ public class BundleManager {
         }
         return null;
     }
+    /*
+	Does it accept service interface to load it?
+    */
+    public Object getService(Class<?> clazz){
+	ServiceReference reference = managedBundle.getBundleContext().getServiceReference(clazz);
+        if (reference != null){
+            return managedBundle.getBundleContext().getService(reference);
+        }
+        return null;
+    }
     public Map<String, String> listAvailableServices(){
         ServiceReference<?>[] services = managedBundle.getRegisteredServices();
         Map<String,String> betterServiceCollection = new HashMap<String, String>();
@@ -57,10 +67,14 @@ public class BundleManager {
         }
         return betterServiceCollection;
     }
+    /*
+	Accepts array of keys returned by ServiceReference.getPropertyKeys();
+	Transfors them into a flat list
+    */
     private List<String> listServiceProperties(String[] keys){
         List<String> props = new ArrayList<String>();
         for (int i = 0; i < keys.length; i++){
-            System.out.println("propertie " + keys[i]);
+		props.add(keys[i]);
         }
         return props;
     }

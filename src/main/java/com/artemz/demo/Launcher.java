@@ -21,22 +21,21 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class Launcher {
-    private static RepositoryAdminConsumer adminConsumer = null;
     private static ServiceTracker adminTracker = null;
     public static BundleContext launch() throws BundleException, IOException {
         FrameworkFactory frameworkFactory = ServiceLoader.load(FrameworkFactory.class).iterator().next();
         System.out.println("FrameworkFactory loaded");
         Map config = new HashMap();
 
-        adminConsumer = new RepositoryAdminConsumer();
-
         List<BundleActivator> activators = new ArrayList<BundleActivator>();
-        activators.add(adminConsumer);
-        //activators.add(new Activator()); //adding activator for repositoryadmin
 
         config.put(FelixConstants.SYSTEMBUNDLE_ACTIVATORS_PROP, activators);
 
-        config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, "org.apache.felix.bundlerepository; version=2.1");
+        config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
+                "org.apache.felix.bundlerepository; version=2.1," +
+                        "ru.multicabinet.module.api" +
+                        "ru.mutlicabinet.bundle"
+        );
 
         // automated bundles deployment
         config.put("felix.fileinstall.dir", "./base-bundles");
@@ -53,9 +52,6 @@ public class Launcher {
         /*adminTracker = new ServiceTracker(adminConsumer.getContext(), RepositoryAdmin.class.getName(), null);
         adminTracker.open();*/
         return framework.getBundleContext();
-    }
-    public static RepositoryAdminConsumer getAdminConsumer(){
-        return adminConsumer;
     }
     public static Bundle installLocalBundle(BundleContext ctx, String bundlePath) throws FileNotFoundException, BundleException{
         File bundleFile = new File(bundlePath);

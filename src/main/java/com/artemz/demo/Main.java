@@ -1,9 +1,7 @@
 package com.artemz.demo;
 
 
-import com.artemz.demo.obr.ObrManager;
-import org.apache.felix.bundlerepository.Repository;
-import org.apache.felix.bundlerepository.RepositoryAdmin;
+import org.apache.felix.bundlerepository.*;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -22,7 +20,7 @@ import java.io.IOException;
 public class Main {
     private static Framework framework;
 
-    public static void main(String[] args) throws InterruptedException{
+    public static void main(String[] args) throws Exception{
         BundleContext context = null;
         Bundle admin = null;
         try {
@@ -39,8 +37,6 @@ public class Main {
             exception.printStackTrace();
             System.exit(1);
         }
-        final RepositoryAdminConsumer adminConsumer = Launcher.getAdminConsumer();
-
         //ObrManager manager = new ObrManager(context);
         //System.out.println(adminConsumer.getContext().getBundles());
 /*
@@ -73,7 +69,7 @@ public class Main {
          */
         Bundle[] bundles = context.getBundles();
         for (int i = 0; i < bundles.length; i++){
-            System.out.println("Installed bundle: " + bundles[i].getLocation());
+            System.out.println("Installed bundle: " + bundles[i].getSymbolicName());
             ServiceReference<?>[] services = bundles[i].getRegisteredServices();
             /*
                 Printing out all available services in this bundle
@@ -89,6 +85,8 @@ public class Main {
         BundleManager bundleManager = new BundleManager(admin);
         bundleManager.listAvailableServices();
         repositoryAdmin = (RepositoryAdmin)bundleManager.getService(RepositoryAdmin.class);
+
+        repositoryAdmin.addRepository("file:///home/artemz/.m2/repository/repository.xml");
 
         /*ServiceReference ref =
                 admin.getBundleContext().getServiceReference(RepositoryAdmin.class.getName());
@@ -108,6 +106,44 @@ public class Main {
         }
 
         System.out.println("OK");
+
+        /*
+            Discover available resources
+         */
+        Resolver resolver = repositoryAdmin.resolver();
+        Resource[] resources = repositoryAdmin.discoverResources("(category=gateway)");
+        for (int i = 0; i < resources.length; i++ ){
+            System.out.println("Discovered resource: " + resources[i].getPresentationName());
+
+            /*
+                Discrover bundle categories
+             */
+            String[] categories = resources[i].getCategories();
+            if (categories != null){
+                for (int c = 0; c < categories.length; c++){
+                    System.out.println("Category: " + categories[c]);
+                }
+            }
+            /*
+                Print bundle description
+             */
+            System.out.println("Description: " + resources[i].getProperties().get(Resource.DESCRIPTION));
+            resolver.add(resources[i]);
+        }
+        if (resolver.resolve()){
+            System.out.println("Resolved");
+            //resolver.deploy(Resolver.START);
+        } else {
+            Reason[] reqs = resolver.getUnsatisfiedRequirements();
+            for (int i = 0; i < reqs.length; i++)
+            {
+                /*
+                    LDAP filters can be parsed with https://directory.apache.org/api/gen-docs/latest/apidocs/org/apache/directory/api/ldap/model/filter/FilterParser.html
+                 */
+                System.out.println("Unable to resolve: " + reqs[i].getRequirement().getName());
+            }
+        }
+
         //System.exit(0);
     }
 }

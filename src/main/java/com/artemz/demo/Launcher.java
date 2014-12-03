@@ -33,8 +33,9 @@ public class Launcher {
 
         config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
                 "org.apache.felix.bundlerepository; version=2.1," +
-                        "ru.multicabinet.module.api" +
-                        "ru.mutlicabinet.bundle"
+                        "ru.multicabinet.module," +
+                        "ru.multicabinet.module.api," +
+                        "ru.multicabinet.bundle; version=1.0.0.SNAPSHOT"
         );
 
         // automated bundles deployment
